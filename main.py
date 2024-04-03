@@ -18,7 +18,6 @@ st.divider()
 query = st.text_input('Input your keyword')
 
 # image generator
-api_key = "W6rmGVFPuxMtYvqhUUtWnNHpMV1OD9AMrpt9G9NfSZ4Ido1Nwc6AZ6RQ"
 num_images = st.number_input("Enter the number of images", min_value=1, max_value=5, value=3)
 
 
