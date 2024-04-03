@@ -1,58 +1,11 @@
-from langchain_openai import OpenAI
-from langchain.chains import LLMChain
-from langchain.prompts import PromptTemplate
-from pexel import get_pexels_images
-import re
+from langchain.chat_models import ChatOpenAI
+import streamlit as st
 
-template = """Question: {question}\n\n
-            Answer: Please organize each element in briefly sentence."""
-prompt = PromptTemplate.from_template(template)
-llm = OpenAI()
-llm_chain = LLMChain(prompt=prompt, llm=llm)
-question = "What are the three key tips for providing information?"
+chat_model = ChatOpenAI()
+st.title('인공지능 시인')
+content = st.text_input('시의 주제를 제시해주세요')
 
-import streamlit as st 
-st.title('Infograpic Generator')
-st.text("<www.pexels.com> Photos provided by pexels")
-st.divider()
-query = st.text_input('Input your keyword')
-
-# image generator
-api_key = "W6rmGVFPuxMtYvqhUUtWnNHpMV1OD9AMrpt9G9NfSZ4Ido1Nwc6AZ6RQ"
-num_images = st.number_input("Enter the number of images", min_value=1, max_value=5, value=3)
-
-
-if st.button("Generator"):
-    images = get_pexels_images(api_key, query, per_page=num_images)
-    result_dict = llm_chain.invoke(query)
-    text = result_dict["text"]
-    sentences = re.split(r'[.!?]', text)  
-
-   
-    for i, (image, sentence) in enumerate(zip(images, sentences)):
-        if i < len(images):
-            st.image(image, caption=sentence.strip(), width=400)  
-            if i < len(images) - 1:
-                st.divider()
-
-
-# Text, Image 따로
-st.divider()
-col1, col2 = st.columns(2)
-
-with col1:
-    st.header("Only Image")
-    
-    if st.button("Image"):
-        images = get_pexels_images(api_key, query, per_page=num_images)
-        for image in images:
-            st.image(image, use_column_width=True)
-    
-with col2:
-    st.header("Only Text")
-    # Text generator
-
-    if st.button('Text'):
-        with st.spinner("waiting..."):
-            text = llm_chain.invoke(query)
-            st.write(text)
+if st.button('시 작성 요청하기'):
+    with st.spinner('시 작성중...'):
+        result = chat_model.predict(content + "에 대한 시를 써줘")
+        st.write(result)
