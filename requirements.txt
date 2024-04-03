@@ -1,5 +1,5 @@
-langchain
-openai
-streamlit==0.85.0
-langchain-openai==0.1.0
-pexel==0.2.1
+OpenAI
+LLMChain
+PromptTemplate
+get_pexels_images
+re
